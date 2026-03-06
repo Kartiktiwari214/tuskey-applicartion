@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Todo Application - Kartik Tiwari</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            /* Soft gradient background to make the 3D elements pop */
+            background: linear-gradient(135deg, #e0e5ec 0%, #ffffff 100%);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        /* 3D Container */
+        .container-3d {
+            background: #e0e5ec;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
+        }
+
+        /* 3D Text Effect */
+        .text-3d {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2), -2px -2px 4px rgba(255,255,255,0.8);
+            color: #333;
+            font-weight: 800;
+        }
+
+        /* 3D Input Field (Inset Shadow) */
+        .input-3d {
+            border: none;
+            background: #e0e5ec;
+            border-radius: 12px;
+            box-shadow: inset 6px 6px 12px #c8cdd4, inset -6px -6px 12px #f8fdff;
+            transition: all 0.2s ease;
+        }
+        .input-3d:focus {
+            background: #e4e9f0;
+            outline: none;
+            box-shadow: inset 8px 8px 16px #c8cdd4, inset -8px -8px 16px #f8fdff;
+        }
+
+        /* 3D Buttons */
+        .btn-3d {
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.1s ease-in-out;
+        }
+
+        /* Add button */
+        .btn-3d-primary {
+            background-color: #0d6efd;
+            color: white;
+            box-shadow: 0 6px #0a58ca, 0 10px 15px rgba(0,0,0,0.2);
+        }
+        .btn-3d-primary:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px #0a58ca, 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Complete button */
+        .btn-3d-success {
+            background-color: #198754;
+            color: white;
+            box-shadow: 0 4px #146c43, 0 6px 10px rgba(0,0,0,0.2);
+        }
+        .btn-3d-success:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px #146c43, 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Delete button */
+        .btn-3d-danger {
+            background-color: #dc3545;
+            color: white;
+            box-shadow: 0 4px #b02a37, 0 6px 10px rgba(0,0,0,0.2);
+        }
+        .btn-3d-danger:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px #b02a37, 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 3D Task Cards */
+        .card-3d {
+            background: #e0e5ec;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+            transition: transform 0.2s ease;
+        }
+        .card-3d:hover {
+            transform: translateY(-3px);
+        }
+
+        .text-strikethrough {
+            text-decoration: line-through;
+            color: #8c8c8c;
+            opacity: 0.7;
+        }
+
+        /* Link styling for Admin */
+        .admin-link {
+            text-decoration: none;
+            color: #d62976; /* Instagram brand color */
+            font-weight: 600;
+        }
+        .admin-link:hover {
+            color: #fa7e1e;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container container-3d mt-5">
+
+    <h1 class="text-center text-3d mb-1">Tuskey Application</h1>
+
+    <p class="text-center text-muted mb-4">
+        Created by <strong>Kartik Tiwari</strong> | Admin:
+        <a href="https://www.instagram.com/kartik_tiwari216?igsh=MTN3Z3hsaXEybWxwMw==" target="_blank" class="admin-link">@kartik_tiwari216</a>
+    </p>
+
+    <form th:action="@{/}" method="post" class="row mt-3 mb-5 align-items-center">
+
+        <div class="col-md-9">
+            <input
+                    type="text"
+                    name="title"
+                    class="form-control form-control-lg input-3d"
+                    placeholder="Add a new task..."
+                    required>
+        </div>
+
+        <div class="col-md-3 mt-3 mt-md-0">
+            <button
+                    type="submit"
+                    class="btn btn-3d btn-3d-primary btn-lg w-100">
+                Add Task
+            </button>
+        </div>
+
+    </form>
+
+    <div>
+        <div th:each="task : ${tasks}" class="card card-3d mb-3">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center p-3">
+
+                <span
+                        th:text="${task.title}"
+                        th:classappend="${task.completed} ? 'text-strikethrough' : ''"
+                        class="fs-5 fw-medium mb-3 mb-md-0">
+                    Task Title
+                </span>
+
+                <div class="d-flex gap-2">
+
+                    <a
+                            th:href="@{/{id}/toggle(id=${task.id})}"
+                            class="btn btn-3d btn-3d-success btn-sm px-3">
+                        Complete
+                    </a>
+
+                    <a
+                            th:href="@{/{id}/delete(id=${task.id})}"
+                            class="btn btn-3d btn-3d-danger btn-sm px-3">
+                        Delete
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
